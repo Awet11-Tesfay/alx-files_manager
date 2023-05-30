@@ -1,6 +1,8 @@
 import { promisify } from 'utl';
 import { createClient } from 'redis';
 
+const redis = require('redis')
+
 
 class RedisClient {
     constructor() {
