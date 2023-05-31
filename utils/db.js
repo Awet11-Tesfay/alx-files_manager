@@ -1,51 +1,32 @@
-import { MongoClient } from 'mongodb';
+const { MongoClient } = require('mongodb');
 
-const Host = process.env.DB_HOST || 'localhost';
-const Port = process.env.DB_PORT || 27017;
-const Database = process.env.DB_DATABASE || 'files_manager';
-const Urls = `mongodb://${Host}:${Port}`;
+const host = process.env.DB_HOST || 'localhost';
+const port = process.env.DB_PORT || 27017;
+const database = process.env.DB_DATABASE || 'files_manager';
+const url = `mongodb://${host}:${port}`;
 
-/**
- * DbClient class
- */
 class DBClient {
-    /**
-     * Constructor that creates a client to mongodb
-     */
   constructor() {
-    MongoClient.connect(Urls, { useUnifiedTopology: true }, (error, client) => {
-      if (!error) {
-        this.db = client.db(Database);
-        this.usersCollection = this.db.collection('users');
-        this.filesCollection = this.db.collection('files');
+    MongoClient.connect(url, (err, client) => {
+      if (!err) {
+        this.db = client.db(database);
       } else {
-        console.log(error.message);
         this.db = false;
       }
     });
   }
 
-  /**
-   * Return true when the connection to redis is success
-   */
   isAlive() {
-    return Boolean(this.db);
+    if (this.db) return true;
+    return false;
   }
 
-  /**
-   * Returns the number of documents
-   */
   async nbUsers() {
-    const Users = this.usersCollection.countDocuments();
-    return Users;
+    return this.db.collection('users').countDocuments();
   }
 
-  /**
-   * Return the number of documents in collection files
-   */
   async nbFiles() {
-    const Files = this.filesCollection.countDocuments();
-    return Files;
+    return this.db.collection('files').countDocuments();
   }
 }
 
