@@ -15,6 +15,12 @@ const router = (app) => {
   paths.get('/connect', ((request, response) => AuthController.getConnect(request, response)));
   paths.get('/disconnect', ((request, response) => AuthController.getDisconnect(request, response)));
   paths.get('/users/me', ((request, response) => UsersController.getMe(request, response)));
+  paths.post('/files', ((request, response) => FilesController.postUpload(request, response)));
+  paths.get('/files/:id', ((request, response) => FilesController.getShow(request, response)));
+  paths.get('/files', ((request, response) => FilesController.getIndex(request, response)));
+  paths.put('/files/:id/publish', ((request, response) => FilesController.putPublish(request, response)));
+  paths.put('/files/:id/unpublish', ((request, response) => FilesController.putUnpublish(request, response)));
+  paths.get('/files/:id/data', ((request, response) => FilesController.getFile(request, response)));
 };
 
 export default router;
